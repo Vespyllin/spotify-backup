@@ -1,6 +1,5 @@
 import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from '../env'
-import { AuthClient, LibraryClient } from '.'
-import { PlaylistClient } from './playlist'
+import { AuthClient, LibraryClient, PlaylistClient, UserClient } from '.'
 
 export const SpotifyClient = () => {
 	const spotifyAPI = `https://api.spotify.com`
@@ -12,6 +11,7 @@ export const SpotifyClient = () => {
 	return {
 		auth: AuthClient(spotifyURL, CLIENT_ID, SECRET_BUFFER_B64, REDIRECT_URI),
 		library: LibraryClient(spotifyAPI),
+		user: UserClient(spotifyAPI),
 		playlist: PlaylistClient(spotifyAPI),
 	}
 }

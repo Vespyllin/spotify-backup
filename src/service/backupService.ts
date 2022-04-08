@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import path from 'path'
 import { getTimehash, createDirectory, sleep } from '../util'
 import { Dump_Data } from '../types/dump'
+import e from 'express'
 
 export const BackupService = () => {
 	const getLikedTrackData = async (
@@ -150,7 +151,6 @@ export const BackupService = () => {
 		if (backup === '') return ''
 
 		// Return backup without whitespace
-		console.log(backup)
 		return fs
 			.readFileSync(`${checkDirectory}/${backup}`)
 			.toString()
@@ -165,22 +165,45 @@ export const BackupService = () => {
 			playlistTitle?: string
 		}
 	) => {
-		const a = `${backupFolderPath}/tracks/${data?.backupTitle ?? ''}`
-		if (!fs.existsSync(a)) return console.log('Folder does not exist')
+		if (!fs.existsSync(`${backupFolderPath}/tracks/${data?.backupTitle ?? ''}`))
+			return console.log('Could not find specified backup path.')
 
 		const backupContent: Dump_Data[] = JSON.parse(
 			getBackupContent(`${backupFolderPath}/tracks`, data?.backupTitle)
 		)
 
-		console.log(backupContent.map((x) => x.added_at))
+		const title = data?.playlistTitle ?? `${getTimehash()} - Liked Tracks`
+		const date = backupContent[0].added_at
+		const backupURIs = backupContent.map((x) => `spotify:track:${x.id}`)
 
-		const playlistUri = (
-			await spotifyClient.playlist.createPlaylist('esoryx', access_token, {
-				name: getTimehash(),
-				description: `Backup of liked tracks made at ${new Date().toISOString()}`,
+		const playlistID = (
+			await spotifyClient.user.createPlaylist(access_token, 'esoryx', {
+				name: title,
+				description: `Backup of liked tracks made effectively at ${date}`,
 				public: false,
 			})
-		).data.uri
+		).data.id
+
+		const batchConstant = 100
+		for (let i = 0; i < Math.ceil(backupURIs.length / batchConstant); i++) {
+			const currentBatch = backupURIs
+				.slice(i * batchConstant, (i + 1) * batchConstant)
+				.toString()
+
+			await spotifyClient.playlist.addTracksToPlaylist(
+				access_token,
+				playlistID,
+				currentBatch
+			)
+		}
+
+		console.log(
+			`${
+				data?.backupTitle ? `Back up ${data?.backupTitle}` : 'Latest backup'
+			} added to playlist ${title}`
+		)
+
+		await sleep(1000)
 	}
 
 	return { getLikedTrackData, getLikedAlbumData, backupToFolder, importToPlaylist }
