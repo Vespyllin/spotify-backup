@@ -80,8 +80,12 @@ export const BackupService = () => {
 	}
 
 	// Store liked tracks/albums' Spotify ID, name, publishing artist and date saved
-	const backupToFolder = async (access_token: string, folderPath: string = '../') => {
-		const timeHash = getTimehash()
+	const backupToFolder = async (
+		access_token: string,
+		folderPath: string = '../',
+		backupTitle?: string
+	) => {
+		const title = backupTitle ?? getTimehash()
 
 		const likedTracks = await getLikedTrackData(access_token)
 		const likedAlbums = await getLikedAlbumData(access_token)
@@ -101,13 +105,13 @@ export const BackupService = () => {
 
 		if (commitTracks)
 			fs.writeFileSync(
-				`${folderPath}/tracks/${timeHash}-${likedTracks.length}.json`,
+				`${folderPath}/tracks/${title}-${likedTracks.length}.json`,
 				likedTracksJSON
 			)
 
 		if (commitAlbums)
 			fs.writeFileSync(
-				`${folderPath}/albums/${timeHash}-${likedAlbums.length}.json`,
+				`${folderPath}/albums/${title}-${likedAlbums.length}.json`,
 				likedAlbumsJSON
 			)
 
