@@ -141,20 +141,18 @@ export const BackupService = () => {
 		})
 
 		// Get title of latest backup/verify if supplied title exists
-		const backup = !title
+		const backupTitle = !title
 			? backupMetadata.reduce(
 					(acc, val) => (acc.lastUpdated > val.lastUpdated ? acc : val),
 					{ file: '', lastUpdated: 0 }
 			  ).file
-			: backupMetadata.find((metadata) => metadata.file == title) ?? ''
+			: backupMetadata.find((metadata) => metadata.file == title)?.file ?? ''
 
-		if (backup === '') return ''
+		if (backupTitle === '') return ''
 
+		const fullPath = path.resolve(`${checkDirectory}/${backupTitle}`)
 		// Return backup without whitespace
-		return fs
-			.readFileSync(`${checkDirectory}/${backup}`)
-			.toString()
-			.replace(/\s+/g, '')
+		return fs.readFileSync(fullPath).toString().replace(/\s+/g, '')
 	}
 
 	const importToPlaylist = async (
@@ -165,25 +163,29 @@ export const BackupService = () => {
 			playlistTitle?: string
 		}
 	) => {
-		if (!fs.existsSync(`${backupFolderPath}/tracks/${data?.backupTitle ?? ''}`))
+		const fullPath = path.resolve(
+			`${backupFolderPath}/tracks/${data?.backupTitle ?? ''}`
+		)
+
+		if (!fs.existsSync(fullPath))
 			return console.log('Could not find specified backup path.')
 
 		const backupContent: Dump_Data[] = JSON.parse(
 			getBackupContent(`${backupFolderPath}/tracks`, data?.backupTitle)
 		)
 
-		const title = data?.playlistTitle ?? `${getTimehash()} - Liked Tracks`
-		const date = backupContent[0].added_at
-		const backupURIs = backupContent.map((x) => `spotify:track:${x.id}`)
+		const playlistTitle = data?.playlistTitle ?? `${getTimehash()} - Liked Tracks`
+		const lastChangeDate = backupContent[0].added_at
 
 		const playlistID = (
 			await spotifyClient.user.createPlaylist(access_token, 'esoryx', {
-				name: title,
-				description: `Backup of liked tracks made effectively at ${date}`,
+				name: playlistTitle,
+				description: `Liked tracks as modified at ${lastChangeDate}`,
 				public: false,
 			})
 		).data.id
 
+		const backupURIs = backupContent.map((x) => `spotify:track:${x.id}`)
 		const batchConstant = 100
 		for (let i = 0; i < Math.ceil(backupURIs.length / batchConstant); i++) {
 			const currentBatch = backupURIs
@@ -200,7 +202,7 @@ export const BackupService = () => {
 		console.log(
 			`${
 				data?.backupTitle ? `Back up ${data?.backupTitle}` : 'Latest backup'
-			} added to playlist ${title}`
+			} added to playlist ${playlistTitle}`
 		)
 
 		await sleep(1000)

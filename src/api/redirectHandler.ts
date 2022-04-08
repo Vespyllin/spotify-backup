@@ -4,7 +4,12 @@ import { spotifyClient } from '../client'
 import { backupService } from '../service'
 import { generateRandomString } from '../util'
 
-export const redirectHandler = (app: Application, shutdown: () => void) => {
+export const redirectHandler = (
+	app: Application,
+	shutdown: () => void,
+	backupPath: string,
+	backupTitle?: string
+) => {
 	let stateVal: string
 
 	app.get('/export', async (req, res) => {
@@ -35,20 +40,19 @@ export const redirectHandler = (app: Application, shutdown: () => void) => {
 			const { mode } = req.cookies
 			if (state !== stateVal) throw new Error('Mismatched state values.')
 
-			const backupPath = '../spotify-backup'
-
 			const authReq = await spotifyClient.auth.getAuthorizationToken(code as string)
 			const { access_token } = authReq
 
-			res.sendFile(path.join(__dirname, '../../index.html'))
 			if (mode == 'export') {
 				backupService.backupToFolder(access_token, backupPath)
 			} else if (mode == 'import') {
-				backupService.importToPlaylist(access_token, backupPath)
+				backupService.importToPlaylist(access_token, backupPath, { backupTitle })
 			}
+
+			res.sendFile(path.join(__dirname, '../../index.html'))
 		} catch (error) {
 			console.log(error)
-			res.json(error)
+			res.sendFile(path.join(__dirname, '../../index.html'))
 		}
 
 		// Send closing tab
