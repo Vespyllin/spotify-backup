@@ -100,9 +100,6 @@ export const BackupService = () => {
 			createDirectory(`${folderPath}/albums/`) ||
 			getBackupContent(`${folderPath}/albums/`) != likedAlbumsJSON
 
-		console.log(commitTracks, commitAlbums)
-		// importToPlaylist(access_token, `${folderPath}/tracks/`)
-
 		if (commitTracks)
 			fs.writeFileSync(
 				`${folderPath}/tracks/${title}-${likedTracks.length}.json`,

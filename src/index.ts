@@ -9,7 +9,7 @@ const main = (mode: string, backupPath: string, backupTitle?: string) => {
 const args = process.argv.slice(2)
 const DEFAULT_PATH = '../spotify-backup'
 
-if (args[0] != 'import' && args[0] != 'export')
+if (args.length != 0 && args[0] != 'import' && args[0] != 'export')
 	console.log('Specify import/export in the first argument')
 
 switch (args.length) {
