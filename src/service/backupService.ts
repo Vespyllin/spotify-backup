@@ -90,15 +90,18 @@ export const BackupService = () => {
 		const likedTracks = await getLikedTrackData(access_token)
 		const likedAlbums = await getLikedAlbumData(access_token)
 
-		const likedTracksJSON = JSON.stringify(likedTracks).replace(/\s+/g, '')
-		const likedAlbumsJSON = JSON.stringify(likedAlbums).replace(/\s+/g, '')
+		const likedTracksJSON = JSON.stringify(likedTracks)
+		const likedAlbumsJSON = JSON.stringify(likedAlbums)
 
 		const commitTracks =
 			createDirectory(`${folderPath}/tracks/`) ||
-			getBackupContent(`${folderPath}/tracks/`) != likedTracksJSON
+			getBackupContent(`${folderPath}/tracks/`).replace(/\s+/g, '') !=
+				likedTracksJSON.replace(/\s+/g, '')
+
 		const commitAlbums =
 			createDirectory(`${folderPath}/albums/`) ||
-			getBackupContent(`${folderPath}/albums/`) != likedAlbumsJSON
+			getBackupContent(`${folderPath}/albums/`).replace(/\s+/g, '') !=
+				likedAlbumsJSON.replace(/\s+/g, '')
 
 		if (commitTracks)
 			fs.writeFileSync(
@@ -153,7 +156,7 @@ export const BackupService = () => {
 
 		const fullPath = path.resolve(`${checkDirectory}/${backupTitle}`)
 		// Return backup without whitespace
-		return fs.readFileSync(fullPath).toString().replace(/\s+/g, '')
+		return fs.readFileSync(fullPath).toString()
 	}
 
 	const importToPlaylist = async (
