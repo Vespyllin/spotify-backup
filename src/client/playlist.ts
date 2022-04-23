@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { stringifyQueries } from '../util'
 
 export const PlaylistClient = (spotifyAPI: string) => {
 	const axiosInstance = axios.create({

@@ -12,7 +12,7 @@ export const redirectHandler = (
 ) => {
 	let stateVal: string
 
-	app.get('/export', async (req, res) => {
+	app.get('/export', async (_req, res) => {
 		stateVal = generateRandomString(16)
 
 		res.cookie('mode', 'export')
@@ -23,7 +23,7 @@ export const redirectHandler = (
 		)
 	})
 
-	app.get('/import', async (req, res) => {
+	app.get('/import', async (_req, res) => {
 		stateVal = generateRandomString(16)
 
 		res.cookie('mode', 'import')

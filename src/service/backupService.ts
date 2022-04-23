@@ -3,7 +3,6 @@ import * as fs from 'fs'
 import path from 'path'
 import { getTimehash, createDirectory, sleep } from '../util'
 import { Dump_Data } from '../types/dump'
-import e from 'express'
 
 export const BackupService = () => {
 	const getLikedTrackData = async (
