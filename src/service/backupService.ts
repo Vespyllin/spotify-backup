@@ -128,7 +128,7 @@ export const BackupService = () => {
 			console.log(`${updateString} backed up to ${absoluteFolderPath}`)
 		}
 
-		await sleep(1000)
+		await sleep(5000)
 	}
 
 	const getBackupContent = (checkDirectory: string, title?: string) => {

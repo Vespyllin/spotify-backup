@@ -23,7 +23,7 @@ export const stringifyQueries = (queries: { [query: string]: any }) => {
 	return queryString
 }
 
-export const sleep = (ms: number) => new Promise(() => setTimeout(() => {}, ms))
+export const sleep = async (ms: number) => new Promise((x) => setTimeout(x, ms))
 
 export const getTimehash = () => {
 	return Date.now()

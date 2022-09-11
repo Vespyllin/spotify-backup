@@ -2,7 +2,7 @@ import { Application } from 'express'
 import path from 'path'
 import { spotifyClient } from '../client'
 import { backupService } from '../service'
-import { generateRandomString } from '../util'
+import { generateRandomString, sleep } from '../util'
 
 export const redirectHandler = (
 	app: Application,
@@ -47,15 +47,16 @@ export const redirectHandler = (
 				backupService.backupToFolder(access_token, backupPath)
 			} else if (mode == 'import') {
 				backupService.importToPlaylist(access_token, backupPath, { backupTitle })
+			} else {
+				throw new Error('Mode not set to import/export.')
 			}
-
-			res.sendFile(path.join(__dirname, '../../index.html'))
 		} catch (error) {
 			console.log(error)
-			res.sendFile(path.join(__dirname, '../../index.html'))
+			await sleep(5000)
 		}
 
 		// Send closing tab
+		res.sendFile(path.join(__dirname, '../../index.html'))
 		// Close down server to allow the script to end automatically
 		shutdown()
 	})
