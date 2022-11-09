@@ -1,4 +1,4 @@
-import { SpotifyClient } from './spotify'
+import { SpotifyClient } from './spotifyClient'
 
 export * from './auth'
 export * from './library'

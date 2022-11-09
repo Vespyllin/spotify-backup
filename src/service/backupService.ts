@@ -1,5 +1,4 @@
 import path from 'path'
-import { SpotifyClient } from '../client/spotify'
 import { Dump_Data } from '../types/dump'
 
 import { sleep } from '../util'
@@ -15,7 +14,7 @@ export const BackupService = (
 	const spotifyInterface = SpotifyInterfaceService(access_token)
 
 	const test = async () => {
-		console.log(await SpotifyClient().playlist.getUserPlaylists(access_token))
+		console.log(await spotifyInterface.getUserPlaylists())
 	}
 
 	// Store liked tracks/albums' Spotify ID, name, publishing artist and date saved

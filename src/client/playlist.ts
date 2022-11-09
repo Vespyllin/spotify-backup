@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { stringifyQueries } from '../util'
 
 export const PlaylistClient = (spotifyAPI: string) => {
 	const axiosInstance = axios.create({
@@ -27,8 +28,8 @@ export const PlaylistClient = (spotifyAPI: string) => {
 
 	const getUserPlaylists = async (
 		access_token: string,
-		limit: number = 10,
-		offset: number = 2
+		offset: number,
+		limit: number
 	) => {
 		const _axiosInstance = axios.create({
 			baseURL: `${spotifyAPI}/v1/me/playlists`,
@@ -43,9 +44,7 @@ export const PlaylistClient = (spotifyAPI: string) => {
 			return config
 		})
 
-		return await _axiosInstance.post(``, undefined, {
-			params: { limit, offset },
-		})
+		return await _axiosInstance.get(`?${stringifyQueries({ limit, offset })}`)
 	}
 
 	return { addTracksToPlaylist, getUserPlaylists }

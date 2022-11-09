@@ -106,5 +106,13 @@ export const SpotifyInterfaceService = (access_token: string) => {
 		}
 	}
 
-	return { getLikedTrackData, getLikedAlbumData, createPlaylist }
+	const getUserPlaylists = async (offset: number = 2, limit: number = 10) => {
+		const playlists = (
+			await spotifyClient.playlist.getUserPlaylists(access_token, offset, limit)
+		).data.items
+
+		return playlists
+	}
+
+	return { getLikedTrackData, getLikedAlbumData, createPlaylist, getUserPlaylists }
 }

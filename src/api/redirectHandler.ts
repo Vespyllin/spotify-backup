@@ -16,11 +16,7 @@ export const redirectHandler = (
 		stateVal = generateRandomString(16)
 
 		res.cookie('mode', 'export')
-		const scopes = [
-			'user-library-read',
-			// 'playlist-read-private',
-			// 'playlist-read-public',
-		]
+		const scopes = ['user-library-read', 'playlist-read-private']
 
 		res.redirect(
 			spotifyClient.auth.getRedirectPayload(scopes, stateVal) + '&mode=export'
@@ -50,8 +46,8 @@ export const redirectHandler = (
 			const backupService = BackupService(access_token, backupPath, backupTitle)
 
 			if (mode == 'export') {
-				backupService.backupToFolder()
-				// backupService.test()
+				// backupService.backupToFolder()
+				backupService.test()
 			} else if (mode == 'import') {
 				backupService.importToPlaylist()
 			} else {
