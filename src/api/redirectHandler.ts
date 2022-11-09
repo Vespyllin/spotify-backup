@@ -1,7 +1,7 @@
 import { Application } from 'express'
 import path from 'path'
 import { spotifyClient } from '../client'
-import { backupService } from '../service'
+import { BackupService } from '../service'
 import { generateRandomString, sleep } from '../util'
 
 export const redirectHandler = (
@@ -16,7 +16,11 @@ export const redirectHandler = (
 		stateVal = generateRandomString(16)
 
 		res.cookie('mode', 'export')
-		const scopes = ['user-library-read']
+		const scopes = [
+			'user-library-read',
+			// 'playlist-read-private',
+			// 'playlist-read-public',
+		]
 
 		res.redirect(
 			spotifyClient.auth.getRedirectPayload(scopes, stateVal) + '&mode=export'
@@ -43,10 +47,13 @@ export const redirectHandler = (
 			const authReq = await spotifyClient.auth.getAuthorizationToken(code as string)
 			const { access_token } = authReq
 
+			const backupService = BackupService(access_token, backupPath, backupTitle)
+
 			if (mode == 'export') {
-				backupService.backupToFolder(access_token, backupPath)
+				backupService.backupToFolder()
+				// backupService.test()
 			} else if (mode == 'import') {
-				backupService.importToPlaylist(access_token, backupPath, { backupTitle })
+				backupService.importToPlaylist()
 			} else {
 				throw new Error('Mode not set to import/export.')
 			}

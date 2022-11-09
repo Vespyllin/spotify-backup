@@ -1,3 +1,3 @@
-import { BackupService } from './backupService'
-
-export const backupService = BackupService()
+export * from './backupService'
+export * from './fileService'
+export * from './spotifyInterfaceService'
