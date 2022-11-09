@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
 
-import { Dump_Data } from '../types/dump'
 import { createDirectory, getTimehash } from '../util'
 
 export const FileService = (folderPath: string) => {

@@ -13,10 +13,6 @@ export const BackupService = (
 	const fileService = FileService(folderPath)
 	const spotifyInterface = SpotifyInterfaceService(access_token)
 
-	const test = async () => {
-		const playlistData = await spotifyInterface.getUserPlaylistData()
-	}
-
 	// Store liked tracks/albums' Spotify ID, name, publishing artist and date saved
 	const backupToFolder = async () => {
 		const absoluteFolderPath = path.resolve(folderPath)
@@ -67,5 +63,5 @@ export const BackupService = (
 
 		await sleep(5000)
 	}
-	return { test, backupToFolder, importToPlaylist }
+	return { backupToFolder, importToPlaylist }
 }
