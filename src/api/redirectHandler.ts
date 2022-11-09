@@ -46,8 +46,8 @@ export const redirectHandler = (
 			const backupService = BackupService(access_token, backupPath, backupTitle)
 
 			if (mode == 'export') {
-				// backupService.backupToFolder()
-				backupService.test()
+				backupService.backupToFolder()
+				// backupService.test()
 			} else if (mode == 'import') {
 				backupService.importToPlaylist()
 			} else {

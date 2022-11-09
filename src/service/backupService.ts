@@ -14,7 +14,7 @@ export const BackupService = (
 	const spotifyInterface = SpotifyInterfaceService(access_token)
 
 	const test = async () => {
-		console.log(await spotifyInterface.getUserPlaylists())
+		const playlistData = await spotifyInterface.getUserPlaylistData()
 	}
 
 	// Store liked tracks/albums' Spotify ID, name, publishing artist and date saved
@@ -27,16 +27,24 @@ export const BackupService = (
 		const likedAlbumData = await spotifyInterface.getLikedAlbumData()
 		const albumsCommitted = await fileService.backupData(likedAlbumData, 'albums')
 
-		if (!tracksCommitted && !albumsCommitted) {
+		const playlistData = await spotifyInterface.getUserPlaylistData()
+		const playlistsCommitted = await fileService.backupData(playlistData, 'playlists')
+
+		// Format output string
+		const whatCommitted: string[] = []
+		if (tracksCommitted) whatCommitted.push('tracks')
+		if (albumsCommitted) whatCommitted.push('albums')
+		if (playlistsCommitted) whatCommitted.push('playlists')
+
+		if (whatCommitted.length === 0) {
 			console.log(`No changes to backups at ${absoluteFolderPath}`)
 		} else {
-			const whatCommitted = tracksCommitted
-				? 'Tracks'
-				: tracksCommitted && albumsCommitted
-				? '& albums'
-				: 'Albums'
-			console.log(`${whatCommitted} backed up to ${absoluteFolderPath}`)
+			const commitConcat = whatCommitted.join(' & ')
+			const formattedCommitString =
+				commitConcat.charAt(0).toUpperCase() + commitConcat.slice(1)
+			console.log(`${formattedCommitString} backed up to ${absoluteFolderPath}`)
 		}
+
 		await sleep(5000)
 	}
 

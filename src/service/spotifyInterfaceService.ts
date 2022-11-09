@@ -3,15 +3,15 @@ import { Dump_Data } from '../types/dump'
 
 // Interfaces with the SpotifyClient to provide usable data
 export const SpotifyInterfaceService = (access_token: string) => {
-	const getPlaylistData = async (
+	const getUserPlaylistData = async (
 		limit: number = 50,
-		offset: number = 2,
+		offset: number = 0,
 		total: number = 0
 	) => {
 		const rawPlaylistMetadata = await spotifyClient.playlist.getUserPlaylists(
 			access_token,
-			offset,
-			limit
+			2,
+			10
 		)
 
 		const playlistMetadata = rawPlaylistMetadata.data.items.map((x) => {
@@ -19,24 +19,60 @@ export const SpotifyInterfaceService = (access_token: string) => {
 			return { name, description, id }
 		})
 
-		console.log('playlistMetadata')
-		console.log(playlistMetadata)
+		const playlistData: {
+			playlistName: string
+			description: string
+			trackData: Dump_Data[]
+		}[] = []
 
-		const playlistData: any[] = []
+		for (let i = 0; i < playlistMetadata.length; i++) {
+			const {
+				name: playlistName,
+				description,
+				id: playlistId,
+			} = playlistMetadata[i]
 
-		playlistMetadata.forEach(async (metadata) => {
 			const playlistTrackData: Dump_Data[] = []
-			do {
-				const { id } = metadata
 
+			let subscopedLimit = limit
+			let subscopedOffset = offset
+			let subscopedTotal = total
+			do {
 				const playlistTracks = await spotifyClient.playlist.getPlaylistTracks(
 					access_token,
-					id,
-					limit,
-					offset
+					playlistId,
+					subscopedLimit,
+					subscopedOffset
 				)
-			} while (offset <= total && limit != 0)
-		})
+
+				const { data } = playlistTracks
+
+				subscopedTotal = subscopedTotal === 0 ? data.total : subscopedTotal
+				const remaining = subscopedTotal - subscopedOffset
+				subscopedLimit = remaining > 50 ? 50 : remaining
+				subscopedOffset += subscopedLimit
+
+				data.items.forEach((x) => {
+					const { track, added_at } = x
+					const { id: trackId, name: trackName, artists } = track
+
+					playlistTrackData.push({
+						id: trackId,
+						name: trackName,
+						artist: artists[0].name,
+						added_at,
+					})
+				})
+			} while (subscopedOffset <= subscopedTotal && subscopedLimit != 0)
+
+			playlistData.push({
+				playlistName,
+				description,
+				trackData: playlistTrackData,
+			})
+		}
+
+		return playlistData
 	}
 
 	const getLikedTrackData = async (
@@ -115,8 +151,6 @@ export const SpotifyInterfaceService = (access_token: string) => {
 		backupContent: Dump_Data[],
 		isPublic: boolean = false
 	) => {
-		// const playlistTitle = retrievedData.backupTitle
-
 		const playlistID = (
 			await spotifyClient.user.createPlaylist(access_token, 'esoryx', {
 				name: playlistTitle,
@@ -140,13 +174,5 @@ export const SpotifyInterfaceService = (access_token: string) => {
 		}
 	}
 
-	const getUserPlaylists = async (offset: number = 2, limit: number = 10) => {
-		const playlists = (
-			await spotifyClient.playlist.getUserPlaylists(access_token, offset, limit)
-		).data.items
-
-		return playlists
-	}
-
-	return { getLikedTrackData, getLikedAlbumData, createPlaylist, getUserPlaylists }
+	return { getLikedTrackData, getLikedAlbumData, createPlaylist, getUserPlaylistData }
 }

@@ -36,7 +36,7 @@ export const FileService = (folderPath: string) => {
 		}
 	}
 
-	const backupData = async (data: Dump_Data[], subfolder?: string) => {
+	const backupData = async (data: any, subfolder?: string) => {
 		const dataJSON = JSON.stringify(data)
 
 		const finalFolderPath = `${folderPath}${subfolder ? `/${subfolder}` : ''}/`
