@@ -1,0 +1,97 @@
+[
+	{
+		"added_at": "2022-11-06T23:00:00Z",
+		"added_by": {
+			"external_urls": {
+				"spotify": "https://open.spotify.com/user/"
+			},
+			"href": "https://api.spotify.com/v1/users/",
+			"id": "",
+			"type": "user",
+			"uri": "spotify:user:"
+		},
+		"is_local": false,
+		"primary_color": null,
+		"track": {
+			"album": {
+				"album_type": "album",
+				"artists": [
+					{
+						"external_urls": {
+							"spotify": "https://open.spotify.com/artist/7tnIA4ww5dwoyENYz4GM5T"
+						},
+						"href": "https://api.spotify.com/v1/artists/7tnIA4ww5dwoyENYz4GM5T",
+						"id": "7tnIA4ww5dwoyENYz4GM5T",
+						"name": "The Brazen Youth",
+						"type": "artist",
+						"uri": "spotify:artist:7tnIA4ww5dwoyENYz4GM5T"
+					}
+				],
+				"external_urls": {
+					"spotify": "https://open.spotify.com/album/4bICIlWuceu3EznEPvbJD8"
+				},
+				"href": "https://api.spotify.com/v1/albums/4bICIlWuceu3EznEPvbJD8",
+				"id": "4bICIlWuceu3EznEPvbJD8",
+				"images": [
+					{
+						"height": 640,
+						"url": "https://i.scdn.co/image/ab67616d0000b273424feb0b9e1fcbe0137768b4",
+						"width": 640
+					},
+					{
+						"height": 300,
+						"url": "https://i.scdn.co/image/ab67616d00001e02424feb0b9e1fcbe0137768b4",
+						"width": 300
+					},
+					{
+						"height": 64,
+						"url": "https://i.scdn.co/image/ab67616d00004851424feb0b9e1fcbe0137768b4",
+						"width": 64
+					}
+				],
+				"name": "Primitive Initiative",
+				"release_date": "2018-08-17",
+				"release_date_precision": "day",
+				"total_tracks": 10,
+				"type": "album",
+				"uri": "spotify:album:4bICIlWuceu3EznEPvbJD8"
+			},
+			"artists": [
+				{
+					"external_urls": {
+						"spotify": "https://open.spotify.com/artist/7tnIA4ww5dwoyENYz4GM5T"
+					},
+					"href": "https://api.spotify.com/v1/artists/7tnIA4ww5dwoyENYz4GM5T",
+					"id": "7tnIA4ww5dwoyENYz4GM5T",
+					"name": "The Brazen Youth",
+					"type": "artist",
+					"uri": "spotify:artist:7tnIA4ww5dwoyENYz4GM5T"
+				}
+			],
+
+			"disc_number": 1,
+			"duration_ms": 338360,
+			"episode": false,
+			"explicit": false,
+			"external_ids": {
+				"isrc": "QZDA71885044"
+			},
+			"external_urls": {
+				"spotify": "https://open.spotify.com/track/42fSk5kct9cG7Cq36KVgc0"
+			},
+			"href": "https://api.spotify.com/v1/tracks/42fSk5kct9cG7Cq36KVgc0",
+			"id": "42fSk5kct9cG7Cq36KVgc0",
+			"is_local": false,
+			"name": "Figure in the Field",
+			"popularity": 45,
+			"preview_url": "https://p.scdn.co/mp3-preview/0088cba1b20cb9709f3fec9f16351e463c5227b0?cid=774b29d4f13844c495f206cafdad9c86",
+			"track": true,
+			"track_number": 10,
+			"type": "track",
+			"uri": "spotify:track:42fSk5kct9cG7Cq36KVgc0"
+		},
+		"video_thumbnail": {
+			"url": null
+		}
+	}
+]

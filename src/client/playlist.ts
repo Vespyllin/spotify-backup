@@ -26,6 +26,22 @@ export const PlaylistClient = (spotifyAPI: string) => {
 		// ${stringifyQueries({ uris: trackURIs })}`
 	}
 
+	const getPlaylistTracks = async (
+		access_token: string,
+		playlist_id: string,
+		limit: number,
+		offset: number
+	) => {
+		axiosInstance.interceptors.request.use((config) => {
+			if (config.headers) config.headers['Authorization'] = `Bearer ${access_token}`
+			return config
+		})
+
+		return await axiosInstance.get(
+			`/${playlist_id}/tracks?${stringifyQueries({ limit, offset })}`
+		)
+	}
+
 	const getUserPlaylists = async (
 		access_token: string,
 		offset: number,
@@ -47,5 +63,5 @@ export const PlaylistClient = (spotifyAPI: string) => {
 		return await _axiosInstance.get(`?${stringifyQueries({ limit, offset })}`)
 	}
 
-	return { addTracksToPlaylist, getUserPlaylists }
+	return { addTracksToPlaylist, getUserPlaylists, getPlaylistTracks }
 }
