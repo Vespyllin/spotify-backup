@@ -23,7 +23,6 @@ export const PlaylistClient = (spotifyAPI: string) => {
 		return await axiosInstance.post(`/${playlist_id}/tracks`, undefined, {
 			params: { uris: trackURIs },
 		})
-		// ${stringifyQueries({ uris: trackURIs })}`
 	}
 
 	const getPlaylistTracks = async (

@@ -7,7 +7,6 @@ export const LibraryClient = (spotifyAPI: string) => {
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
-			// Authorization: `Bearer ${access_token}`,
 		},
 	})
 

@@ -4,15 +4,24 @@ import path from 'path'
 import { createDirectory, getTimehash } from '../util'
 
 export const FileService = (folderPath: string) => {
-	const getBackupContent = (checkDirectory: string, title?: string) => {
+	const getBackupContent = (retreivePath: string, title?: string) => {
+		if (!fs.existsSync(retreivePath)) return null
+
+		if (fs.lstatSync(retreivePath).isFile()) {
+			return {
+				backupTitle: path.basename(retreivePath),
+				data: fs.readFileSync(retreivePath).toString(),
+			}
+		}
+
 		// Get titles of all files in directory
-		const backups = fs.readdirSync(checkDirectory)
+		const backups = fs.readdirSync(retreivePath)
 
 		// Find metadata of files in folder
 		const backupMetadata = backups.map((file) => {
 			return {
 				file,
-				lastUpdated: fs.statSync(`${checkDirectory}/${file}`).birthtimeMs,
+				lastUpdated: fs.statSync(`${retreivePath}/${file}`).birthtimeMs,
 			}
 		})
 
@@ -26,7 +35,7 @@ export const FileService = (folderPath: string) => {
 
 		if (retrievedBackupTitle === '') return null
 
-		const fullPath = path.resolve(`${checkDirectory}/${retrievedBackupTitle}`)
+		const fullPath = path.resolve(`${retreivePath}/${retrievedBackupTitle}`)
 
 		// Return backup without whitespace
 		return {
