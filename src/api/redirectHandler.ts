@@ -18,9 +18,8 @@ export const redirectHandler = (
 		res.cookie('mode', 'export')
 		const scopes = ['user-library-read', 'playlist-read-private']
 
-		res.redirect(
-			spotifyClient.auth.getRedirectPayload(scopes, stateVal) + '&mode=export'
-		)
+		// Exec this link to be redirected to the callback
+		res.redirect(spotifyClient.auth.getRedirectPayload(scopes, stateVal))
 	})
 
 	app.get('/import', async (_req, res) => {
@@ -29,9 +28,7 @@ export const redirectHandler = (
 		res.cookie('mode', 'import')
 		const scopes = ['playlist-modify-private', 'user-library-read']
 
-		res.redirect(
-			spotifyClient.auth.getRedirectPayload(scopes, stateVal) + '&mode=import'
-		)
+		res.redirect(spotifyClient.auth.getRedirectPayload(scopes, stateVal))
 	})
 
 	app.get('/callback', async (req, res) => {
