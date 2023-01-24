@@ -47,7 +47,6 @@ export const redirectHandler = (
 
 			if (mode == 'export') {
 				backupService.backupToFolder()
-				// backupService.test()
 			} else if (mode == 'import') {
 				backupService.importToPlaylist()
 			} else {
@@ -55,8 +54,9 @@ export const redirectHandler = (
 			}
 		} catch (error) {
 			console.log(error)
-			await sleep(5000)
 		}
+
+		await sleep(5000)
 
 		// Send closing tab
 		res.sendFile(path.join(__dirname, '../../index.html'))

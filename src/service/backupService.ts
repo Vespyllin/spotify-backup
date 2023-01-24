@@ -1,7 +1,6 @@
 import path from 'path'
 import { Dump_Data } from '../types/dump'
 
-import { sleep } from '../util'
 import { FileService } from './fileService'
 import { SpotifyInterfaceService } from './spotifyInterfaceService'
 
@@ -40,8 +39,6 @@ export const BackupService = (
 				commitConcat.charAt(0).toUpperCase() + commitConcat.slice(1)
 			console.log(`${formattedCommitString} backed up to ${absoluteFolderPath}`)
 		}
-
-		await sleep(5000)
 	}
 
 	const importToPlaylist = async () => {
@@ -60,8 +57,6 @@ export const BackupService = (
 				backupTitle ? `Backup ${retrievedData.backupTitle}` : 'Latest backup'
 			} imported to playlist ${retrievedData.backupTitle}`
 		)
-
-		await sleep(5000)
 	}
 	return { backupToFolder, importToPlaylist }
 }

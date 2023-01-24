@@ -5,14 +5,15 @@ import { createDirectory, getTimehash } from '../util'
 
 export const FileService = (folderPath: string) => {
 	const getBackupContent = (retreivePath: string, title?: string) => {
+		// Check if path exists
 		if (!fs.existsSync(retreivePath)) return null
 
-		if (fs.lstatSync(retreivePath).isFile()) {
+		// Check if path is a file
+		if (fs.lstatSync(retreivePath).isFile())
 			return {
 				backupTitle: path.basename(retreivePath),
 				data: fs.readFileSync(retreivePath).toString(),
 			}
-		}
 
 		// Get titles of all files in directory
 		const backups = fs.readdirSync(retreivePath)

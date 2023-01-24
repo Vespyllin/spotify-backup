@@ -10,7 +10,7 @@ export const SpotifyInterfaceService = (access_token: string) => {
 	) => {
 		const rawPlaylistMetadata = await spotifyClient.playlist.getUserPlaylists(
 			access_token,
-			2,
+			0,
 			10
 		)
 
