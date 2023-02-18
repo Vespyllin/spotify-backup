@@ -8,7 +8,7 @@ export const SpotifyInterfaceService = (access_token: string) => {
 		offset: number = 0,
 		total: number = 0
 	) => {
-		const rawPlaylistMetadata = await spotifyClient.playlist.getUserPlaylists(
+		const rawPlaylistMetadata = await spotifyClient.library.getPlaylists(
 			access_token,
 			0,
 			10

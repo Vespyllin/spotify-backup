@@ -36,5 +36,16 @@ export const LibraryClient = (spotifyAPI: string) => {
 		return await axiosInstance.get(`/albums?${stringifyQueries({ limit, offset })}`)
 	}
 
-	return { getLikedTracks, getSavedAlbums }
+	const getPlaylists = async (access_token: string, offset: number, limit: number) => {
+		axiosInstance.interceptors.request.use((config) => {
+			if (config.headers) config.headers['Authorization'] = `Bearer ${access_token}`
+			return config
+		})
+
+		return await axiosInstance.get(
+			`/playlists?${stringifyQueries({ limit, offset })}`
+		)
+	}
+
+	return { getLikedTracks, getSavedAlbums, getPlaylists }
 }

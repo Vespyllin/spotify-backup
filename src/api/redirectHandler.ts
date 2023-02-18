@@ -38,7 +38,7 @@ export const redirectHandler = (
 			if (state !== stateVal) throw new Error('Mismatched state values.')
 
 			const authReq = await spotifyClient.auth.getAuthorizationToken(code as string)
-			const { access_token } = authReq
+			const { access_token } = authReq //! RETURN THIS TO CLI (rusty)
 
 			const backupService = BackupService(access_token, backupPath, backupTitle)
 

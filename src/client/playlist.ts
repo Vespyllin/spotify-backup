@@ -41,26 +41,5 @@ export const PlaylistClient = (spotifyAPI: string) => {
 		)
 	}
 
-	const getUserPlaylists = async (
-		access_token: string,
-		offset: number,
-		limit: number
-	) => {
-		const _axiosInstance = axios.create({
-			baseURL: `${spotifyAPI}/v1/me/playlists`,
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-		})
-
-		_axiosInstance.interceptors.request.use((config) => {
-			if (config.headers) config.headers['Authorization'] = `Bearer ${access_token}`
-			return config
-		})
-
-		return await _axiosInstance.get(`?${stringifyQueries({ limit, offset })}`)
-	}
-
-	return { addTracksToPlaylist, getUserPlaylists, getPlaylistTracks }
+	return { addTracksToPlaylist, getPlaylistTracks }
 }
